@@ -9,6 +9,7 @@ ENV JIRA_DEPENDENCY_GRAPH_GENERATOR create-jira-dependency-graph.py
 
 RUN mkdir -p ${TOOLS_DIR}
 COPY ${JIRA_DEPENDENCY_GRAPH_GENERATOR} ${TOOLS_DIR}/
+RUN chmod ug+rx ${TOOLS_DIR}/*
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends graphviz \
@@ -20,6 +21,7 @@ RUN mkdir -p ${WORK_DIR}
 WORKDIR ${WORK_DIR}
 
 ENV TOOL "${JIRA_DEPENDENCY_GRAPH_GENERATOR}"
-ENV TOOL_OPTIONS "--exclude-link 'created' --exclude-link 'created by' --exclude-link 'clones' --exclude-link 'is cloned by' --user='${JIRA_USER}' --password='${JIRA_PASSWORD}' --jira='${JIRA_URL}' ${JIRA_ISSUES}"
+ENV GRAPH_TYPE svg
+ENV TOOL_OPTIONS "--exclude-link 'created' --exclude-link 'created by' --exclude-link 'clones' --exclude-link 'is cloned by' --user='${JIRA_USER}' --password='${JIRA_PASSWORD}' --jira='${JIRA_URL}' ${JIRA_ISSUES} | tee graph.dot | dot -o graph.${GRAPH_TYPE} -T${GRAPH_TYPE}"
 
 CMD ${TOOLS_DIR}/${TOOL} ${TOOL_OPTIONS}
