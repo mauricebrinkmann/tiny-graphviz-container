@@ -1,7 +1,10 @@
 FROM python:3.8-slim
 
-RUN mkdir -p /opt/mb-tools
-COPY create-jira-dependency-graph.py /opt/mb-tools/
+ENV WORK_DIR /opt/mb/work
+ENV TOOLS_DIR /opt/mb/tools
+
+RUN mkdir -p ${TOOLS_DIR}
+COPY create-jira-dependency-graph.py ${TOOLS_DIR}/
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends graphviz \
