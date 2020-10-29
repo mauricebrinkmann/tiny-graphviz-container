@@ -24,4 +24,4 @@ ENV TOOL "${JIRA_DEPENDENCY_GRAPH_GENERATOR}"
 ENV GRAPH_TYPE1 png
 ENV GRAPH_TYPE2 svg
 
-CMD ${TOOLS_DIR}/${TOOL} --exclude-link "created" --exclude-link "created by" --exclude-link "clones" --exclude-link "is cloned by" --user="${JIRA_USER}" --password="${JIRA_PASSWORD}" --jira="${JIRA_URL}" ${JIRA_ISSUES} | tee graph.dot | dot -o graph.${GRAPH_TYPE1} -T${GRAPH_TYPE1} && (cat graph.dot | dot -o graph.${GRAPH_TYPE2} -T${GRAPH_TYPE2})
+CMD ${TOOLS_DIR}/${TOOL} --exclude-link "created" --exclude-link "created by" --exclude-link "clones" --exclude-link "is cloned by" --user="${JIRA_USER}" --password="${JIRA_PASSWORD}" --jira="${JIRA_URL}" ${JIRA_ISSUES} | grep -Ev 'tested by|is blocked by|split to|depends on|is duplicated by'  | tee graph.dot | dot -o graph.${GRAPH_TYPE1} -T${GRAPH_TYPE1} && (cat graph.dot | dot -o graph.${GRAPH_TYPE2} -T${GRAPH_TYPE2})
