@@ -22,6 +22,5 @@ WORKDIR ${WORK_DIR}
 
 ENV TOOL "${JIRA_DEPENDENCY_GRAPH_GENERATOR}"
 ENV GRAPH_TYPE svg
-ENV TOOL_OPTIONS "--exclude-link 'created' --exclude-link 'created by' --exclude-link 'clones' --exclude-link 'is cloned by' --user='${JIRA_USER}' --password='${JIRA_PASSWORD}' --jira='${JIRA_URL}' ${JIRA_ISSUES} | tee graph.dot | dot -o graph.${GRAPH_TYPE} -T${GRAPH_TYPE}"
 
-CMD ${TOOLS_DIR}/${TOOL} ${TOOL_OPTIONS}
+CMD ${TOOLS_DIR}/${TOOL} --exclude-link "created" --exclude-link "created by" --exclude-link "clones" --exclude-link "is cloned by" --user="${JIRA_USER}" --password="${JIRA_PASSWORD}" --jira="${JIRA_URL}" ${JIRA_ISSUES} | tee graph.dot | dot -o graph.${GRAPH_TYPE} -T${GRAPH_TYPE}
